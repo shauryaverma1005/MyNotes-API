@@ -34,8 +34,12 @@ const updateNote = async (req, res)=> {
 
         const note = await User.findById(noteID);
 
+        if(!note){
+            res.status(404).json({message: "Note not found !"})
+        }
+
         if(note.user.toString() !== req.user._id.toString()){
-            res.status(403).json({message: "Note not found !"});
+            res.status(403).json({message: "Operation not allowed !"});
         }
 
         note.title = title || note.title;
@@ -55,8 +59,12 @@ const deleteNote = async (req, res) => {
         const noteID = req.params.id;
         const note = await User.findById(noteID);
 
+        if(!note){
+            res.status(404).json({message: "Note not found !"})
+        }
+
         if(note.user.toString() !== req.user._id.toString()){
-            res.status(404).json({message: "Note not found !"});
+            res.status(404).json({message: "Operation not allowed !"});
         }
 
         await note.deleteOne();

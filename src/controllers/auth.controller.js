@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
 };
 
 // User Login Controller
-const loginUser = async () => {
+const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -46,4 +46,17 @@ const loginUser = async () => {
   }
 };
 
-export {registerUser, loginUser};
+//Get Profile
+const getProfile = async (req, res) => {
+  try {
+    res.status(200).json({
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    })  
+  } catch (error) {
+    res.status(500).json({message: error.message});
+  }
+};
+
+export {registerUser, loginUser, getProfile};
