@@ -27,19 +27,24 @@ const getAllNote = async (req, res) => {
 };
 
 // Update a note
-const updateNote = async (req, res)=> {
+const updateNote = async (req, res) => {
     try {
         const noteID = req.params.id;
-        const {title, content} = req.body;
+        const { title, content } = req.body;
+
+
+        if (!req.user) {
+            return res.status(401).json({ message: "Not authorized: no user on request (missing/invalid token)" });
+        }
 
         const note = await Note.findById(noteID);
 
-        if(!note){
-            return res.status(404).json({message: "Note not found !"})
+        if (!note) {
+            return res.status(404).json({ message: "Note not found !" });
         }
 
-        if(note.user.toString() !== req.user._id.toString()){
-            return res.status(403).json({message: "Operation not allowed !"});
+        if (note.user.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Operation not allowed !" });
         }
 
         note.title = title ?? note.title;
@@ -47,9 +52,9 @@ const updateNote = async (req, res)=> {
 
         const updatedNote = await note.save();
         return res.json(updatedNote);
-
-    } catch(error){
-        return res.status(500).json({message: error.message})
+    } catch (error) {
+        console.error("updateNote error:", error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
