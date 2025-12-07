@@ -10,9 +10,9 @@ const createNote = async (req, res) => {
             user: req.user._id,
         });
 
-        res.status(201).json(newNote);
+        return res.status(201).json({newNote});
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return res.status(500).json({message: error.message})
     }
 };
 
@@ -20,9 +20,9 @@ const createNote = async (req, res) => {
 const getAllNote = async (req, res) => {
     try{
         const AllNotes = await Note.find({user: req.user._id});
-        res.json(AllNotes);
+        return res.json(AllNotes);
     }catch(error){
-        res.status(500).json({message: error.message});
+        return res.status(500).json({message: error.message});
     }
 };
 
@@ -32,24 +32,24 @@ const updateNote = async (req, res)=> {
         const noteID = req.params.id;
         const {title, content} = req.body;
 
-        const note = await User.findById(noteID);
+        const note = await Note.findById(noteID);
 
         if(!note){
-            res.status(404).json({message: "Note not found !"})
+            return res.status(404).json({message: "Note not found !"})
         }
 
         if(note.user.toString() !== req.user._id.toString()){
-            res.status(403).json({message: "Operation not allowed !"});
+            return res.status(403).json({message: "Operation not allowed !"});
         }
 
-        note.title = title || note.title;
-        note.content = content || note.content;
+        note.title = title ?? note.title;
+        note.content = content ?? note.content;
 
         const updatedNote = await note.save();
-        res.json(updatedNote);
+        return res.json(updatedNote);
 
     } catch(error){
-        res.status(500).json({message: error.message})
+        return res.status(500).json({message: error.message})
     }
 };
 
@@ -57,20 +57,20 @@ const updateNote = async (req, res)=> {
 const deleteNote = async (req, res) => {
     try{
         const noteID = req.params.id;
-        const note = await User.findById(noteID);
+        const note = await Note.findById(noteID);
 
         if(!note){
-            res.status(404).json({message: "Note not found !"})
+            return res.status(404).json({message: "Note not found !"})
         }
 
         if(note.user.toString() !== req.user._id.toString()){
-            res.status(404).json({message: "Operation not allowed !"});
+            return res.status(404).json({message: "Operation not allowed !"});
         }
 
         await note.deleteOne();
-        res.json({message: "Note deleted Successfully !"});
+        return res.json({message: "Note deleted Successfully !"});
     } catch(error){
-        res.status(500).json({message: error.message});
+        return res.status(500).json({message: error.message});
     }
 }
 

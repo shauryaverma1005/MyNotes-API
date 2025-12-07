@@ -11,7 +11,7 @@ router.post("/", auth, createNote);
 router.get("/", auth, getAllNote);
 
 //Update a note
-router.update("/:id", auth, updateNote);
+router.put("/:id", auth, updateNote);
 
 //Delete a note
 router.delete("/:id", auth, deleteNote);
