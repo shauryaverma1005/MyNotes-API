@@ -15,5 +15,5 @@ import passRoutes from "./routes/user.routes.js";
 
 app.use("/api/mynotes", noteRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/password", passRoutes)
+app.use("/api/user", passRoutes)
 export {app}
