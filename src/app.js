@@ -11,8 +11,9 @@ app.use(express.urlencoded({extended: true, limit:"16kb"}));
 // All Routes
 import noteRoutes from "./routes/noteRoutes.js";
 import authRoutes from "./routes/auth.routes.js";
+import passRoutes from "./routes/user.routes.js";
 
 app.use("/api/mynotes", noteRoutes);
 app.use("/api/auth", authRoutes);
-
+app.use("/api/password", passRoutes)
 export {app}
